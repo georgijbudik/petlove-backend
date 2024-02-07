@@ -10,6 +10,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
+
   await app.listen(PORT);
   logger.log(`Application listening on port ${PORT}`);
 }

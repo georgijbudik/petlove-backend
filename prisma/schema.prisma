@@ -9,11 +9,73 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Post {
-  id         Int        @id @default(autoincrement())
-  createdAt  DateTime   @default(now())
+
+model User {
+    id    Int     @default(autoincrement()) @id
+  email String  @unique
+  name  String
+  password String
+  profileUrl String
+  notices Notice[]
+createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
-  title      String
-  published  Boolean    @default(false)
-  authorId   Int
+}
+
+model Notice {
+  id         Int      @default(autoincrement()) @id
+  species     String
+  category    String
+  price       Int
+  title       String
+  name        String
+  birthday    DateTime
+  comment     String
+  sex         String
+  location    String      
+  imgURL      String
+  popularity  Int
+createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  owner User?    @relation(fields: [ownerId], references: [id])
+  ownerId Int
+}
+
+
+model News {
+  id        Int      @default(autoincrement()) @id
+  imgUrl   String
+  title    String
+  text     String
+  date     DateTime
+  url      String
+  link     String
+}
+
+model Friend {
+  id          Int  @default(autoincrement()) @id
+  title       String
+  url         String
+  addressUrl  String
+  imageUrl    String
+  address     String
+  workDays    WorkDay[] @relation(fields: [])
+  phone       String
+  email       String
+}
+
+model WorkDay {
+  id       Int  @default(autoincrement()) @id
+  isOpen   Boolean
+  from     String?
+  to       String?
+  friend   Friend?  @relation(fields: [friendId], references: [id])
+  friendId Int?
+}
+
+model Location {
+  id        Int  @default(autoincrement()) @id
+  useCounty String
+  stateEn   String
+  cityEn    String
+  countyEn  String
 }

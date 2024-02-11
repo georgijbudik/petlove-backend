@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataDto } from './data.dto';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class NoticesRepository {
   constructor(private prisma: PrismaService) {}

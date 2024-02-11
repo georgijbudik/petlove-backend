@@ -5,7 +5,7 @@ import { CitiesModule } from './cities/cities.module';
 import { NewsModule } from './news/news.module';
 import { ConfigModule } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
-import { PrismaModule } from './prisma.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [

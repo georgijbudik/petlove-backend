@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { NewsRepository } from './news.repository';
 
-import { News } from '@prisma/client';
+import { News, Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
-import { PaginatedOutputDto } from './pagination-output.dto';
+import { PaginatedOutputDto } from '../prisma/dto/pagination-output.dto';
+import { createPaginator } from 'prisma-pagination';
 
 @Injectable()
 export class NewsService {
-  constructor(private readonly newsRepository: NewsRepository) {}
+  constructor(private prisma: PrismaService) {}
 
   async getAll({
     page,
@@ -16,6 +17,19 @@ export class NewsService {
     page?: number;
     perPage?: number;
   }): Promise<PaginatedOutputDto<News>> {
-    return await this.newsRepository.getAll({ page, perPage });
+    const paginate = createPaginator({ perPage });
+
+    return paginate<News, Prisma.NewsFindManyArgs>(
+      this.prisma.news,
+      {
+        where: {},
+        orderBy: {
+          id: 'asc',
+        },
+      },
+      {
+        page,
+      },
+    );
   }
 }

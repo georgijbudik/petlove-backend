@@ -6,6 +6,7 @@ import { NewsModule } from './news/news.module';
 import { ConfigModule } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { PrismaModule } from './prisma.module';
+import { FriendsModule } from './friends/friends.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PrismaModule } from './prisma.module';
     CitiesModule,
     NewsModule,
     PrismaModule,
+    FriendsModule,
   ],
 })
 export class AppModule {}

@@ -46,7 +46,7 @@ model News {
   imgUrl   String
   title    String
   text     String
-  date     DateTime
+  date     String
   url      String
   link     String
 }
@@ -58,19 +58,11 @@ model Friend {
   addressUrl  String
   imageUrl    String
   address     String
-  workDays    WorkDay[] @relation(fields: [])
+  workHours   String
   phone       String
   email       String
 }
 
-model WorkDay {
-  id       Int  @default(autoincrement()) @id
-  isOpen   Boolean
-  from     String?
-  to       String?
-  friend   Friend?  @relation(fields: [friendId], references: [id])
-  friendId Int?
-}
 
 model Location {
   id        Int  @default(autoincrement()) @id

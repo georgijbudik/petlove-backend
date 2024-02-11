@@ -3,7 +3,7 @@ import { NewsService } from './news.service';
 
 import { News } from '@prisma/client';
 
-import { PaginatedOutputDto } from './pagination-output.dto';
+import { PaginatedOutputDto } from '../prisma/dto/pagination-output.dto';
 
 @Controller('news')
 export class NewsController {

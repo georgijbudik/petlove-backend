@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { NoticesRepository } from './notices.repository';
-import { DataDto } from './data.dto';
 @Injectable()
 export class NoticesService {
   constructor(private noticesRepository: NoticesRepository) {}

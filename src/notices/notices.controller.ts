@@ -1,6 +1,5 @@
 import { Body, Controller, Get } from '@nestjs/common';
 import { NoticesService } from './notices.service';
-import { DataDto } from './data.dto';
 
 @Controller('notices')
 export class NoticesController {

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { FriendsRepository } from './friends.repository';
 import { Friend } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class FriendsService {
-  constructor(private readonly friendsRepository: FriendsRepository) {}
+  constructor(private readonly prismaService: PrismaService) {}
   async getAllFriends(): Promise<Friend[]> {
-    return this.friendsRepository.getAllFriends();
+    return await this.prismaService.friend.findMany();
   }
 }

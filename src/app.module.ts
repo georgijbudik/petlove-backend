@@ -8,7 +8,6 @@ import { configValidationSchema } from './config.schema';
 import { FriendsModule } from './friends/friends.module';
 import { PrismaModule } from './prisma/prisma.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({

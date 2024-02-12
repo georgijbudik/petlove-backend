@@ -1,71 +1,65 @@
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider  = "postgresql"
-  url  	    = env("DATABASE_URL")
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
-
 model User {
-    id    Int     @default(autoincrement()) @id
-  email String  @unique
-  name  String
-  password String
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  name       String
+  password   String
   profileUrl String
-  notices Notice[]
-createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  notices    Notice[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Notice {
-  id         Int      @default(autoincrement()) @id
-  species     String
-  category    String
-  price       Int
-  title       String
-  name        String
-  birthday    DateTime
-  comment     String
-  sex         String
-  location    String      
-  imgURL      String
-  popularity  Int
-createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  owner User?    @relation(fields: [ownerId], references: [id])
-  ownerId Int
+  id         Int    @id @default(autoincrement())
+  species    String
+  category   String
+  price      Int
+  title      String
+  name       String
+  birthday   String
+  comment    String
+  sex        String
+  location   String
+  imgURL     String
+  popularity Int
+  owner      User?  @relation(fields: [ownerId], references: [id])
+  ownerId    Int?
 }
 
-
 model News {
-  id        Int      @default(autoincrement()) @id
-  imgUrl   String
-  title    String
-  text     String
-  date     String
-  url      String
-  link     String
+  id     Int    @id @default(autoincrement())
+  imgUrl String
+  title  String
+  text   String
+  date   String
+  url    String
+  link   String
 }
 
 model Friend {
-  id          Int  @default(autoincrement()) @id
-  title       String
-  url         String
-  addressUrl  String
-  imageUrl    String
-  address     String
-  workHours   String
-  phone       String
-  email       String
+  id         Int    @id @default(autoincrement())
+  title      String
+  url        String
+  addressUrl String
+  imageUrl   String
+  address    String
+  workHours  String
+  phone      String
+  email      String
 }
 
-
 model Location {
-  id        Int  @default(autoincrement()) @id
+  id        Int    @id @default(autoincrement())
   useCounty String
   stateEn   String
   cityEn    String

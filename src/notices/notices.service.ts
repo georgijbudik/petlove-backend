@@ -1,14 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { NoticesRepository } from './notices.repository';
+import { CreateNoticeDto } from './dto/create-notice.dto';
+import { UpdateNoticeDto } from './dto/update-notice.dto';
+
+import { PrismaService } from 'src/prisma/prisma.service';
+
 @Injectable()
 export class NoticesService {
-  constructor(private noticesRepository: NoticesRepository) {}
+  constructor(private prisma: PrismaService) {}
+
+  async create(createNoticeDto: CreateNoticeDto) {
+    return this.prisma.notice.create({ data: createNoticeDto });
+  }
+
+  async findAll() {
+    return await this.prisma.notice.findMany();
+  }
+
+  async findOne(id: number) {
+    return await this.prisma.notice.findUnique({ where: { id } });
+  }
+
+  update(id: number, updateNoticeDto: UpdateNoticeDto) {
+    return `This action updates a #${id} notice`;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} notice`;
+  }
 }
-
-// async getNotices() {
-//   return this.noticesRepository.getNotices();
-// }
-
-// async createNotice(data: DataDto): Promise<Notice> {
-//   return this.noticesRepository.createNotice(data);
-// }

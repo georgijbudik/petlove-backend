@@ -13,7 +13,8 @@ export class NewsController {
   async findAll(
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 6,
+    @Query('search') search: string,
   ): Promise<PaginatedOutputDto<News>> {
-    return await this.newsService.getAll({ page, perPage });
+    return await this.newsService.getAll({ page, perPage, search });
   }
 }

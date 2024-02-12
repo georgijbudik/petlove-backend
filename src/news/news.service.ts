@@ -13,16 +13,22 @@ export class NewsService {
   async getAll({
     page,
     perPage,
+    search,
   }: {
     page?: number;
     perPage?: number;
+    search?: string;
   }): Promise<PaginatedOutputDto<News>> {
     const paginate = createPaginator({ perPage });
 
     return paginate<News, Prisma.NewsFindManyArgs>(
       this.prisma.news,
       {
-        where: {},
+        where: {
+          title: {
+            contains: search,
+          },
+        },
         orderBy: {
           id: 'asc',
         },

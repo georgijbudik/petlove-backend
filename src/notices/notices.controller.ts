@@ -1,42 +1,37 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { NoticesService } from './notices.service';
-import { CreateNoticeDto } from './dto/create-notice.dto';
-import { UpdateNoticeDto } from './dto/update-notice.dto';
+
+import { ParseIntPipe, ParseBoolPipe, DefaultValuePipe } from '@nestjs/common';
 
 @Controller('notices')
 export class NoticesController {
   constructor(private readonly noticesService: NoticesService) {}
 
-  @Post()
-  create(@Body() createNoticeDto: CreateNoticeDto) {
-    return this.noticesService.create(createNoticeDto);
-  }
-
   @Get()
-  findAll() {
-    return this.noticesService.findAll();
+  findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('perPage', new DefaultValuePipe(6), ParseIntPipe) perPage: number,
+    @Query('search') search: string,
+    @Query('category') category: string,
+    @Query('gender') gender: string,
+    @Query('type') type: string,
+    @Query('byPopularity') byPopularity: string,
+    @Query('byPrice') byPrice: string,
+  ) {
+    return this.noticesService.findAll({
+      page,
+      perPage,
+      search,
+      category,
+      gender,
+      type,
+      byPopularity,
+      byPrice,
+    });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.noticesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNoticeDto: UpdateNoticeDto) {
-    return this.noticesService.update(+id, updateNoticeDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.noticesService.remove(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.noticesService.findOne(id);
   }
 }

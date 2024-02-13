@@ -14,9 +14,10 @@ model User {
   name       String
   password   String
   profileUrl String
-  notices    Notice[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  notices    Notice[]
+  Pet        Pet[]
 }
 
 model Notice {
@@ -32,8 +33,8 @@ model Notice {
   location   String
   imgURL     String
   popularity Int
-  owner      User?  @relation(fields: [ownerId], references: [id])
   ownerId    Int?
+  owner      User?  @relation(fields: [ownerId], references: [id])
 }
 
 model News {
@@ -53,9 +54,9 @@ model Friend {
   addressUrl String
   imageUrl   String
   address    String
-  workHours  String
   phone      String
   email      String
+  workHours  String
 }
 
 model Location {
@@ -64,4 +65,16 @@ model Location {
   stateEn   String
   cityEn    String
   countyEn  String
+}
+
+model Pet {
+  id       Int    @id @default(autoincrement())
+  species  String
+  title    String
+  name     String
+  sex      String
+  birthday String
+  imgURL   String
+  ownerId  Int
+  User     User   @relation(fields: [ownerId], references: [id])
 }

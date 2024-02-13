@@ -74,7 +74,30 @@ export class NoticesService {
     );
   }
 
-  async findOne(id: number) {
-    return await this.prisma.notice.findUnique({ where: { id } });
+  getCategories() {
+    return ['found', 'free', 'lost', 'sell'];
+  }
+
+  getSex() {
+    return ['female', 'male', 'multiple', 'unknown'];
+  }
+
+  getSpecies() {
+    return [
+      'dog',
+      'cat',
+      'monkey',
+      'bird',
+      'snake',
+      'turtle',
+      'lizard',
+      'frog',
+      'fish',
+      'ants',
+      'bees',
+      'butterfly',
+      'spider',
+      'scorpion',
+    ];
   }
 }

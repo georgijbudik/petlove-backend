@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { NoticesService } from './notices.service';
 
 import { ParseIntPipe, DefaultValuePipe } from '@nestjs/common';
@@ -39,8 +39,18 @@ export class NoticesController {
     });
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.noticesService.findOne(id);
+  @Get('/categories')
+  getCategories() {
+    return this.noticesService.getCategories();
+  }
+
+  @Get('/sex')
+  getSex() {
+    return this.noticesService.getSex();
+  }
+
+  @Get('/species')
+  getSpecies() {
+    return this.noticesService.getSpecies();
   }
 }

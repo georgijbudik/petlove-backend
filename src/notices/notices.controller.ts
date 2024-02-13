@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { NoticesService } from './notices.service';
 
-import { ParseIntPipe, ParseBoolPipe, DefaultValuePipe } from '@nestjs/common';
+import { ParseIntPipe, DefaultValuePipe } from '@nestjs/common';
 
 @Controller('notices')
 export class NoticesController {
@@ -15,9 +15,16 @@ export class NoticesController {
     @Query('category') category: string,
     @Query('gender') gender: string,
     @Query('type') type: string,
-    @Query('byPopularity') byPopularity: string,
-    @Query('byPrice') byPrice: string,
+    @Query('popular') popular: string,
+    @Query('unpopular') unpopular: string,
+    @Query('expensive') expensive: string,
+    @Query('cheap') cheap: string,
   ) {
+    const isPopular = popular !== undefined;
+    const isUnpopular = unpopular !== undefined;
+    const isExpensive = expensive !== undefined;
+    const isCheap = cheap !== undefined;
+
     return this.noticesService.findAll({
       page,
       perPage,
@@ -25,8 +32,10 @@ export class NoticesController {
       category,
       gender,
       type,
-      byPopularity,
-      byPrice,
+      isPopular,
+      isUnpopular,
+      isExpensive,
+      isCheap,
     });
   }
 

@@ -14,8 +14,10 @@ interface IGetAllQueries {
   category?: string;
   gender?: string;
   type?: string;
-  byPopularity?: string;
-  byPrice?: string;
+  isPopular?: boolean;
+  isUnpopular?: boolean;
+  isCheap?: boolean;
+  isExpensive?: boolean;
 }
 
 @Injectable()
@@ -29,8 +31,10 @@ export class NoticesService {
     category,
     gender,
     type,
-    byPopularity,
-    byPrice,
+    isPopular,
+    isUnpopular,
+    isExpensive,
+    isCheap,
   }: IGetAllQueries): Promise<PaginatedOutputDto<Notice>> {
     const paginate = createPaginator({ perPage });
 
@@ -52,12 +56,12 @@ export class NoticesService {
             equals: type,
           },
           popularity: {
-            lt: byPopularity === 'unpopular' ? 5 : 10,
-            gte: byPopularity === 'popular' ? 5 : 0,
+            gte: isPopular ? 6 : 0,
+            lte: isUnpopular ? 5 : 10,
           },
           price: {
-            lt: byPrice === 'cheap' ? 80 : 200,
-            gte: byPrice === 'expensive' ? 80 : 0,
+            gte: isExpensive ? 81 : 0,
+            lte: isCheap ? 80 : 200,
           },
         },
         orderBy: {

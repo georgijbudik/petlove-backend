@@ -16,6 +16,7 @@ model User {
   profileUrl String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  token      String
   notices    Notice[]
   Pet        Pet[]
 }
@@ -72,9 +73,9 @@ model Pet {
   species  String
   title    String
   name     String
-  sex      String
   birthday String
+  sex      String
   imgURL   String
-  ownerId  Int
-  User     User   @relation(fields: [ownerId], references: [id])
+  ownerId  Int?
+  User     User?  @relation(fields: [ownerId], references: [id])
 }

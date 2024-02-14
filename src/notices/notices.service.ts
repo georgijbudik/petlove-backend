@@ -14,10 +14,10 @@ interface IGetAllQueries {
   category?: string;
   gender?: string;
   type?: string;
-  isPopular?: boolean;
-  isUnpopular?: boolean;
-  isCheap?: boolean;
-  isExpensive?: boolean;
+  popular?: boolean;
+  unpopular?: boolean;
+  cheap?: boolean;
+  expensive?: boolean;
 }
 
 @Injectable()
@@ -31,47 +31,81 @@ export class NoticesService {
     category,
     gender,
     type,
-    isPopular,
-    isUnpopular,
-    isExpensive,
-    isCheap,
+    popular,
+    unpopular,
+    expensive,
+    cheap,
   }: IGetAllQueries): Promise<PaginatedOutputDto<Notice>> {
     const paginate = createPaginator({ perPage });
 
-    return await paginate<Notice, Prisma.NoticeFindManyArgs>(
-      this.prisma.notice,
-      {
-        where: {
-          title: {
-            contains: search,
-            mode: 'insensitive',
+    if (gender === 'all') {
+      return await paginate<Notice, Prisma.NoticeFindManyArgs>(
+        this.prisma.notice,
+        {
+          where: {
+            title: {
+              contains: search,
+              mode: 'insensitive',
+            },
+            category: {
+              contains: category,
+            },
+            species: {
+              contains: type,
+            },
+            popularity: {
+              gte: popular ? 6 : 0,
+              lte: unpopular ? 5 : 10,
+            },
+            price: {
+              gte: expensive ? 81 : 0,
+              lte: cheap ? 80 : 200,
+            },
           },
-          category: {
-            contains: category,
-          },
-          sex: {
-            equals: gender,
-          },
-          species: {
-            equals: type,
-          },
-          popularity: {
-            gte: isPopular ? 6 : 0,
-            lte: isUnpopular ? 5 : 10,
-          },
-          price: {
-            gte: isExpensive ? 81 : 0,
-            lte: isCheap ? 80 : 200,
+          orderBy: {
+            id: 'asc',
           },
         },
-        orderBy: {
-          id: 'asc',
+        {
+          page,
         },
-      },
-      {
-        page,
-      },
-    );
+      );
+    } else {
+      return await paginate<Notice, Prisma.NoticeFindManyArgs>(
+        this.prisma.notice,
+        {
+          where: {
+            title: {
+              contains: search,
+              mode: 'insensitive',
+            },
+            category: {
+              contains: category,
+            },
+            sex: {
+              contains: gender,
+            },
+            species: {
+              contains: type,
+            },
+            popularity: {
+              gte: popular ? 6 : 0,
+              lte: unpopular ? 5 : 10,
+            },
+            price: {
+              gte: expensive ? 81 : 0,
+              lte: cheap ? 80 : 200,
+            },
+          },
+          orderBy: {
+            id: 'asc',
+          },
+        },
+        {
+          page,
+        },
+      );
+    }
   }
 
   getCategories() {

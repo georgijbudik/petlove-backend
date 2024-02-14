@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { NoticesService } from './notices.service';
 
-import { ParseIntPipe, DefaultValuePipe } from '@nestjs/common';
+import { ParseIntPipe, DefaultValuePipe, ParseBoolPipe } from '@nestjs/common';
 
 @Controller('notices')
 export class NoticesController {
@@ -15,15 +15,16 @@ export class NoticesController {
     @Query('category') category: string,
     @Query('gender') gender: string,
     @Query('type') type: string,
-    @Query('popular') popular: string,
-    @Query('unpopular') unpopular: string,
-    @Query('expensive') expensive: string,
-    @Query('cheap') cheap: string,
+    @Query('popular', new DefaultValuePipe(false), ParseBoolPipe)
+    popular: boolean,
+    @Query('unpopular', new DefaultValuePipe(false), ParseBoolPipe)
+    unpopular: boolean,
+    @Query('expensive', new DefaultValuePipe(false), ParseBoolPipe)
+    expensive: boolean,
+    @Query('cheap', new DefaultValuePipe(false), ParseBoolPipe)
+    cheap: boolean,
   ) {
-    const isPopular = popular !== undefined;
-    const isUnpopular = unpopular !== undefined;
-    const isExpensive = expensive !== undefined;
-    const isCheap = cheap !== undefined;
+    console.log(unpopular);
 
     return this.noticesService.findAll({
       page,
@@ -32,10 +33,10 @@ export class NoticesController {
       category,
       gender,
       type,
-      isPopular,
-      isUnpopular,
-      isExpensive,
-      isCheap,
+      popular,
+      unpopular,
+      expensive,
+      cheap,
     });
   }
 

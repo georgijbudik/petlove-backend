@@ -13,6 +13,8 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { UpdateUserDto } from '../auth/dto/update-user.dto';
 import { AccessTokenGuard } from 'src/auth/common/access.guard';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from '@prisma/client';
 
 @Controller('users')
 export class UsersController {
@@ -26,6 +28,12 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('current')
+  getCurrent(@GetUser() user: User) {
+    return this.usersService.getCurrent(user.id);
   }
 
   @Get(':id')

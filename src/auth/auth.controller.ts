@@ -11,24 +11,24 @@ import { RefreshTokenGuard } from './common/refresh.guard';
 export class AuthController {
   constructor(private authService: AuthService) {}
   @Post('signup')
-  signup(@Body() createUserDto: CreateUserDto): Promise<User> {
+  signup(@Body() createUserDto: CreateUserDto) {
     return this.authService.signup(createUserDto);
   }
 
   @Post('signin')
-  signin(@Body() loginCredentialsDto: LoginCredentialsDto): Promise<User> {
+  signin(@Body() loginCredentialsDto: LoginCredentialsDto) {
     return this.authService.signin(loginCredentialsDto);
   }
 
   @UseGuards(AccessTokenGuard)
   @Post('logout')
   logout(@GetUser() user: User) {
-    return this.authService.logout(user.id);
+    this.authService.logout(user.id);
   }
 
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
-  refreshTokens(@GetUser() user) {
+  refreshTokens(@GetUser() user: User) {
     const userId = user['id'];
     const refreshToken = user['token'];
     return this.authService.refreshTokens(userId, refreshToken);

@@ -1,11 +1,13 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-// import { UsersRepository } from '../users.repository';
-import { ConfigService } from '@nestjs/config';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
 import { jwtsecret } from '../auth.module';
 import { UsersService } from '../../users/users.service';
+
+export type JwtPayload = {
+  id: number;
+  name: string;
+};
 
 @Injectable()
 export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -16,15 +18,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload): Promise<User> {
-    const { id } = payload;
-
-    const user = await this.usersService.findById(id);
-
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-
-    return user;
+  async validate(payload: JwtPayload) {
+    return payload;
   }
 }

@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-// import { UsersRepository } from './users.repository';
 import { AccessTokenStrategy } from './strategies/jwt.access.strategy';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { RefreshTokenStrategy } from './strategies/jwt.refresh.strategy';
@@ -15,7 +14,7 @@ export const jwtsecret = "vgKVAODrsRofy'K*':@v@M";
 @Module({
   imports: [
     ConfigModule,
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule.register({}),
     JwtModule.register({}),
     PrismaModule,
     UsersModule,
@@ -24,7 +23,6 @@ export const jwtsecret = "vgKVAODrsRofy'K*':@v@M";
   providers: [
     AuthService,
     UsersService,
-    // UsersRepository,
     AccessTokenStrategy,
     RefreshTokenStrategy,
   ],

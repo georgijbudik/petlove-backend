@@ -5,13 +5,12 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-// import { UsersRepository } from './users.repository';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { jwtsecret } from './auth.module';
 import { jwtresreshkey } from './strategies/jwt.refresh.strategy';
-import * as bcrypt from 'bcrypt';
+import * as argon2 from 'argon2';
 import { UsersService } from '../users/users.service';
 import { LoginCredentialsDto } from './dto/login-credentials.dto';
 
@@ -19,17 +18,16 @@ import { LoginCredentialsDto } from './dto/login-credentials.dto';
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    // private usersRepository: UsersRepository,
     private jwtService: JwtService,
   ) {}
 
-  async signup(createUserDto: CreateUserDto): Promise<User> {
+  async signup(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto;
     const user = await this.usersService.findByEmail(email);
     if (user) {
       throw new ConflictException('Email is in use');
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await this.hashData(password);
     const newUser = await this.usersService.create({
       ...createUserDto,
       password: hashedPassword,
@@ -37,13 +35,13 @@ export class AuthService {
 
     const tokens = await this.getTokens(newUser.id, newUser.name);
     await this.updateRefreshToken(newUser.id, tokens.refreshToken);
-    return {
-      ...newUser,
-      ...tokens,
-    };
+    return tokens;
   }
 
-  async signin(loginCredentialsDto: LoginCredentialsDto): Promise<User> {
+  hashData(data: string) {
+    return argon2.hash(data);
+  }
+  async signin(loginCredentialsDto: LoginCredentialsDto) {
     const { email, password } = loginCredentialsDto;
     const user = await this.usersService.findByEmail(email);
 
@@ -51,8 +49,7 @@ export class AuthService {
       throw new BadRequestException('User does not exists');
     }
 
-    console.log(user);
-    const comparePassword = await bcrypt.compare(password, user.password);
+    const comparePassword = await argon2.verify(user.password, password);
     if (!comparePassword) {
       throw new UnauthorizedException('Please check your login credentials');
     }
@@ -60,14 +57,11 @@ export class AuthService {
     const tokens = await this.getTokens(user.id, user.name);
 
     await this.updateRefreshToken(user.id, tokens.refreshToken);
-    return {
-      ...user,
-      token: tokens.refreshToken,
-    };
+    return tokens;
   }
 
   async logout(id: number) {
-    return await this.usersService.remove(id);
+    await this.usersService.update(id, { token: '' });
   }
 
   async getTokens(id: number, name: string) {
@@ -98,14 +92,14 @@ export class AuthService {
   }
 
   async updateRefreshToken(id: number, token: string) {
-    const hashedRefreshToken = await bcrypt.hash(token, 10);
-
+    const hashedRefreshToken = await this.hashData(token);
     await this.usersService.update(id, { token: hashedRefreshToken });
   }
+
   async refreshTokens(id: number, token: string) {
     const user = await this.usersService.findById(id);
     if (!user || !user.token) throw new ForbiddenException('Access Denied');
-    const refreshTokenMatches = await bcrypt.compare(user.token, token);
+    const refreshTokenMatches = await argon2.verify(user.token, token);
     if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
     const tokens = await this.getTokens(user.id, user.name);
     await this.updateRefreshToken(user.id, tokens.refreshToken);

@@ -30,6 +30,10 @@ export class UsersService {
     return await this.prismaService.user.findFirst({ where: { email } });
   }
 
+  async getCurrent(id: number) {
+    return await this.findById(id);
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     return await this.prismaService.user.update({
       where: { id },

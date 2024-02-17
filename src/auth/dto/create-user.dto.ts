@@ -6,11 +6,12 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
+import { emailRegexp } from 'src/constants/emailRegexp';
 
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
-  @Matches(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/, {
+  @Matches(emailRegexp, {
     message: 'Invalid email type',
   })
   email: string;

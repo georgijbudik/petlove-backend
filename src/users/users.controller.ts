@@ -66,6 +66,7 @@ export class UsersController {
     const result = await this.cloudinaryService.uploadFile(file);
     return this.usersService.updateAvatar(user.id, result.secure_url);
   }
+  
   @UseGuards(AccessTokenGuard)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: string): Promise<void> {

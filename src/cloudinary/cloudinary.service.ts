@@ -10,7 +10,7 @@ export class CloudinaryService {
       v2.uploader
         .upload_stream(
           {
-            resource_type: 'auto',
+            resource_type: 'image',
           },
           (error, result) => {
             if (error) return reject(error);

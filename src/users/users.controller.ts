@@ -57,12 +57,16 @@ export class UsersController {
 
   @UseGuards(AccessTokenGuard)
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('imgURL'))
   @ApiOkResponse({ description: 'Upload image', type: String })
-  async uploadAvatar(@UploadedFile() file: Express.Multer.File) {
+  async uploadAvatar(
+    @UploadedFile() file: Express.Multer.File,
+    @GetUser() user: User,
+  ) {
     const result = await this.cloudinaryService.uploadFile(file);
-    return result.secure_url;
+    return this.usersService.updateAvatar(user.id, result.secure_url);
   }
+  
   @UseGuards(AccessTokenGuard)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: string): Promise<void> {

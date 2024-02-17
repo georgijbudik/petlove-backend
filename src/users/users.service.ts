@@ -40,6 +40,12 @@ export class UsersService {
       data: { ...updateUserDto },
     });
   }
+  async updateAvatar(id: string, profileUrl: string) {
+    return await this.prismaService.user.update({
+      where: { id },
+      data: { profileUrl },
+    });
+  }
 
   async remove(id: string): Promise<void> {
     await this.prismaService.user.delete({ where: { id } });

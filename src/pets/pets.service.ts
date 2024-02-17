@@ -6,12 +6,22 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class PetsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createPetDto: CreatePetDto) {
-    return this.prisma.pet.create({ data: createPetDto });
+  async create(createPetDto: CreatePetDto, id: string) {
+    const data = {
+      ...createPetDto,
+      ownerId: id,
+    };
+    return this.prisma.pet.create({ data });
   }
 
-  async findAll() {
-    return await this.prisma.pet.findMany();
+  async findAll(id: string) {
+    return await this.prisma.pet.findMany({
+      where: {
+        ownerId: {
+          equals: id,
+        },
+      },
+    });
   }
 
   async remove(id: string) {

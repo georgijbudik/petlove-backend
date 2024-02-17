@@ -60,11 +60,11 @@ export class AuthService {
     return tokens;
   }
 
-  async logout(id: number) {
+  async logout(id: string) {
     await this.usersService.update(id, { token: '' });
   }
 
-  async getTokens(id: number, name: string) {
+  async getTokens(id: string, name: string) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
@@ -91,12 +91,12 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async updateRefreshToken(id: number, token: string) {
+  async updateRefreshToken(id: string, token: string) {
     const hashedRefreshToken = await this.hashData(token);
     await this.usersService.update(id, { token: hashedRefreshToken });
   }
 
-  async refreshTokens(id: number, token: string) {
+  async refreshTokens(id: string, token: string) {
     const user = await this.usersService.findById(id);
     if (!user || !user.token) throw new ForbiddenException('Access Denied');
     const refreshTokenMatches = await argon2.verify(user.token, token);

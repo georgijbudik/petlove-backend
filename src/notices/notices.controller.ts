@@ -24,8 +24,6 @@ export class NoticesController {
     @Query('cheap', new DefaultValuePipe(false), ParseBoolPipe)
     cheap: boolean,
   ) {
-    console.log(unpopular);
-
     return this.noticesService.findAll({
       page,
       perPage,

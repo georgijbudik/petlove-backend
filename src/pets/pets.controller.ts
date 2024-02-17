@@ -18,6 +18,6 @@ export class PetsController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.petsService.remove(+id);
+    return this.petsService.remove(id);
   }
 }

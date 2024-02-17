@@ -14,7 +14,7 @@ export class PetsService {
     return await this.prisma.pet.findMany();
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return await this.prisma.pet.delete({
       where: {
         id,

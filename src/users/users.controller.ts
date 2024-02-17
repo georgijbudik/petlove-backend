@@ -37,19 +37,19 @@ export class UsersController {
   }
 
   @Get(':id')
-  findById(@Param('id', ParseIntPipe) id: number) {
+  findById(@Param('id', ParseIntPipe) id: string) {
     return this.usersService.findById(id);
   }
 
   @UseGuards(AccessTokenGuard)
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
   @UseGuards(AccessTokenGuard)
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  remove(@Param('id', ParseIntPipe) id: string): Promise<void> {
     return this.usersService.remove(id);
   }
 }

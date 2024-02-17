@@ -3,13 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   email      String   @unique
   name       String
   password   String
@@ -17,12 +16,14 @@ model User {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   token      String
-  notices    Notice[]
   pets       Pet[]
+
+  @@map("users")
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Notice {
-  id         Int    @id @default(autoincrement())
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
   species    String
   category   String
   price      Int
@@ -34,22 +35,24 @@ model Notice {
   location   String
   imgURL     String
   popularity Int
-  ownerId    Int?
-  owner      User?  @relation(fields: [ownerId], references: [id])
+
+  @@map("notices")
 }
 
 model News {
-  id     Int    @id @default(autoincrement())
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
   imgUrl String
   title  String
   text   String
   date   String
   url    String
   link   String
+
+  @@map("news")
 }
 
 model Friend {
-  id         Int    @id @default(autoincrement())
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
   title      String
   url        String
   addressUrl String
@@ -58,24 +61,30 @@ model Friend {
   phone      String
   email      String
   workHours  String
+
+  @@map("friends")
 }
 
 model Location {
-  id        Int    @id @default(autoincrement())
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
   useCounty String
   stateEn   String
   cityEn    String
   countyEn  String
+
+  @@map("cities")
 }
 
 model Pet {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
   species  String
   title    String
   name     String
   birthday String
   sex      String
   imgURL   String
-  ownerId  Int?
+  ownerId  String @db.ObjectId
   owner    User?  @relation(fields: [ownerId], references: [id])
+
+  @@map("pets")
 }

@@ -22,7 +22,7 @@ export class UsersService {
     return await this.prismaService.user.findMany();
   }
 
-  async findById(id: number): Promise<User> {
+  async findById(id: string): Promise<User> {
     return await this.prismaService.user.findFirst({ where: { id } });
   }
 
@@ -30,18 +30,18 @@ export class UsersService {
     return await this.prismaService.user.findFirst({ where: { email } });
   }
 
-  async getCurrent(id: number) {
+  async getCurrent(id: string) {
     return await this.findById(id);
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     return await this.prismaService.user.update({
       where: { id },
       data: { ...updateUserDto },
     });
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.prismaService.user.delete({ where: { id } });
   }
 }

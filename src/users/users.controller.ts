@@ -7,7 +7,9 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
@@ -15,10 +17,16 @@ import { UpdateUserDto } from '../auth/dto/update-user.dto';
 import { AccessTokenGuard } from 'src/auth/common/access.guard';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from '@prisma/client';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiOkResponse } from '@nestjs/swagger';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private cloudinaryService: CloudinaryService,
+  ) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -47,6 +55,14 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
+  @UseGuards(AccessTokenGuard)
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOkResponse({ description: 'Upload image', type: String })
+  async uploadAvatar(@UploadedFile() file: Express.Multer.File) {
+    const result = await this.cloudinaryService.uploadFile(file);
+    return result.secure_url;
+  }
   @UseGuards(AccessTokenGuard)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: string): Promise<void> {

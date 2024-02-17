@@ -45,20 +45,3 @@ export class CreateNoticeDto {
   @IsNotEmpty()
   popularity: number;
 }
-
-//   owner      User?    @relation(fields: [ownerId], references: [id])
-//   ownerId    Int?
-
-// {
-//     "species": "dog",
-//     "category": "good",
-//     "price": 1000,
-//     "title": "Cool dog",
-//     "name": "El Primo",
-//     "comment": "very nice and loyal dog",
-//     "birthday": "2020-01-01",
-//     "location": "Ukraine, Odesa",
-//     "sex": "male",
-//     "imgURL": "https://localhost:3001/api/v1/notices",
-//     "popularity": 4
-// }

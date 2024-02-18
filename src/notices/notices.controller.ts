@@ -2,11 +2,16 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { NoticesService } from './notices.service';
 
 import { ParseIntPipe, DefaultValuePipe, ParseBoolPipe } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { responses } from 'src/apiResponses/responses';
 
+@ApiTags('Notices')
 @Controller('notices')
 export class NoticesController {
   constructor(private readonly noticesService: NoticesService) {}
 
+  @ApiOperation({ summary: 'Get notices' })
+  @ApiOkResponse({ description: responses.success })
   @Get()
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
@@ -38,16 +43,22 @@ export class NoticesController {
     });
   }
 
+  @ApiOperation({ summary: 'Get notice categories' })
+  @ApiOkResponse({ description: responses.success })
   @Get('/categories')
   getCategories() {
     return this.noticesService.getCategories();
   }
 
+  @ApiOperation({ summary: 'Get notice sex' })
+  @ApiOkResponse({ description: responses.success })
   @Get('/sex')
   getSex() {
     return this.noticesService.getSex();
   }
 
+  @ApiOperation({ summary: 'Get notice species' })
+  @ApiOkResponse({ description: responses.success })
   @Get('/species')
   getSpecies() {
     return this.noticesService.getSpecies();

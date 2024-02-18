@@ -9,8 +9,8 @@ import { RefreshTokenGuard } from './common/refresh.guard';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiBody,
   ApiConflictResponse,
+  ApiHeader,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
@@ -57,6 +57,11 @@ export class AuthController {
   @ApiOperation({ summary: 'User refresh token' })
   @ApiUnauthorizedResponse({
     description: 'Access Denied',
+  })
+  @ApiHeader({
+    name: 'authorization',
+    description: 'Bearer refresh token',
+    required: true,
   })
   @ApiBearerAuth()
   @UseGuards(RefreshTokenGuard)

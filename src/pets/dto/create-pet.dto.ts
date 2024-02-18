@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty } from 'class-validator';
+import { petSexEnum } from 'src/constants/petSexEnum';
 
 export class CreatePetDto {
   @ApiProperty()
@@ -15,15 +16,15 @@ export class CreatePetDto {
   @IsString()
   @IsNotEmpty()
   name: string;
-  @ApiProperty()
+  @ApiProperty({ type: Date, example: '2024-01-01' })
   @IsString()
   @IsNotEmpty()
   birthday: string;
-  @ApiProperty({ enum: ['male', 'female', 'multiple', 'unknown'] })
+  @ApiProperty({ enum: petSexEnum })
   @IsString()
   @IsNotEmpty()
   sex: 'male' | 'female' | 'multiple' | 'unknown';
-  @ApiProperty({ required: false })
+  @ApiProperty({ type: 'string', format: 'binary', required: false })
   @IsString()
   imgURL: string;
 }

@@ -1,10 +1,8 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   UploadedFile,
@@ -20,6 +18,8 @@ import { User } from '@prisma/client';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
@@ -68,6 +68,7 @@ export class UsersController {
 
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update user' })
+  @ApiOkResponse({ description: responses.success })
   @UseGuards(AccessTokenGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
@@ -80,6 +81,18 @@ export class UsersController {
   @UseGuards(AccessTokenGuard)
   @Post('upload')
   @UseInterceptors(FileInterceptor('imgURL'))
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        imgURL: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiConsumes('multipart/form-data')
   @ApiOkResponse({ description: 'Upload image', type: String })
   async uploadAvatar(
     @UploadedFile() file: Express.Multer.File,

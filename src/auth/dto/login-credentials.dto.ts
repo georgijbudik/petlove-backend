@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
@@ -8,6 +9,7 @@ import {
 import { emailRegexp } from 'src/constants/emailRegexp';
 
 export class LoginCredentialsDto {
+  @ApiProperty()
   @IsEmail()
   @IsString()
   @IsNotEmpty()
@@ -16,6 +18,7 @@ export class LoginCredentialsDto {
   })
   email: string;
 
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @MinLength(7)

@@ -20,7 +20,7 @@ async function bootstrap() {
     swaggerConfig,
     swaggerOptions,
   );
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api-docs', app, document);
   await app.listen(PORT);
 
   logger.log(`Application listening on port ${PORT}`);

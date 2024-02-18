@@ -22,9 +22,5 @@ export class CreatePetDto {
   sex: 'male' | 'female' | 'multiple' | 'unknown';
 
   @IsString()
-  @IsNotEmpty()
   imgURL: string;
 }
-
-//   ownerId  Int?
-//   owner    User?  @relation(fields: [ownerId], references: [id])

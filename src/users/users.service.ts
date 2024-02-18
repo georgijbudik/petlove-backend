@@ -18,10 +18,6 @@ export class UsersService {
     });
   }
 
-  async findAll(): Promise<User[]> {
-    return await this.prismaService.user.findMany();
-  }
-
   async findById(id: string): Promise<User> {
     return await this.prismaService.user.findFirst({ where: { id } });
   }
@@ -45,9 +41,5 @@ export class UsersService {
       where: { id },
       data: { profileUrl },
     });
-  }
-
-  async remove(id: string): Promise<void> {
-    await this.prismaService.user.delete({ where: { id } });
   }
 }

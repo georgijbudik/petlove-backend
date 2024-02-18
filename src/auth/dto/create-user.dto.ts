@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import {
   IsNotEmpty,
@@ -9,6 +10,7 @@ import {
 import { emailRegexp } from 'src/constants/emailRegexp';
 
 export class CreateUserDto {
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @Matches(emailRegexp, {
@@ -16,15 +18,16 @@ export class CreateUserDto {
   })
   email: string;
 
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   name: string;
-
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @MinLength(7)
   password: string;
-
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   token: string;

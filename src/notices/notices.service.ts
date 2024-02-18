@@ -54,8 +54,8 @@ export class NoticesService {
               contains: type,
             },
             popularity: {
-              gte: popular && !unpopular ? 6 : 0,
-              lte: !popular && unpopular ? 5 : 10,
+              gte: popular && !unpopular ? 3 : 0,
+              lte: !popular && unpopular ? 2 : 5,
             },
             price: {
               gte: expensive && !cheap ? 81 : 0,

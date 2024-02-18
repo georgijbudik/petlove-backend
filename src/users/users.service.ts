@@ -36,10 +36,12 @@ export class UsersService {
       data: { ...updateUserDto },
     });
   }
-  async updateAvatar(id: string, profileUrl: string) {
-    return await this.prismaService.user.update({
+  async updateAvatar(id: string, profileUrl: string): Promise<string> {
+    const user = await this.prismaService.user.update({
       where: { id },
       data: { profileUrl },
     });
+
+    return user.profileUrl;
   }
 }

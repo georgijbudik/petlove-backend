@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
-import { UpdateUserDto } from '../auth/dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { AccessTokenGuard } from 'src/auth/common/access.guard';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from '@prisma/client';
@@ -70,9 +70,9 @@ export class UsersController {
   @ApiOperation({ summary: 'Update user' })
   @ApiOkResponse({ description: responses.success })
   @UseGuards(AccessTokenGuard)
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  @Patch()
+  update(@Body() updateUserDto: UpdateUserDto, @GetUser() user: User) {
+    return this.usersService.update(user.id, updateUserDto);
   }
 
   @ApiOperation({ summary: 'Upload user avatar' })

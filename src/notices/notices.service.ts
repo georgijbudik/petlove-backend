@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { PaginatedOutputDto } from 'src/prisma/dto/pagination-output.dto';
 
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma, Notice } from '@prisma/client';
+import { Prisma, Notice, User } from '@prisma/client';
 
 import { createPaginator } from 'prisma-pagination';
 
@@ -133,5 +133,34 @@ export class NoticesService {
       'spider',
       'scorpion',
     ];
+  }
+
+  async addNoticeToFavorites(noticeId: string, user: User) {
+    const currentUser = await this.prisma.user.findUnique({
+      where: { id: user.id },
+    });
+    const { id, ...result } = currentUser;
+    return await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        ...result,
+
+        favoritesIDs: [...currentUser.favoritesIDs, noticeId],
+      },
+    });
+  }
+  async addNoticeToViewed(noticeId: string, user: User) {
+    const currentUser = await this.prisma.user.findUnique({
+      where: { id: user.id },
+    });
+    const { id, ...result } = currentUser;
+    return await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        ...result,
+
+        viewedIDs: [...currentUser.viewedIDs, noticeId],
+      },
+    });
   }
 }

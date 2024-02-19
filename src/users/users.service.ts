@@ -13,6 +13,7 @@ export class UsersService {
       data: {
         ...createUserDto,
         profileUrl: '',
+        phone: '',
         token: '',
       },
     });

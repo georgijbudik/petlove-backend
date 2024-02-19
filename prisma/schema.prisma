@@ -11,6 +11,7 @@ model User {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   email      String   @unique
   name       String
+  phone      String
   password   String
   profileUrl String
   createdAt  DateTime @default(now())

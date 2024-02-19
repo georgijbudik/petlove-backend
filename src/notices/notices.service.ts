@@ -150,7 +150,7 @@ export class NoticesService {
       where: { id: user.id },
     });
     const { id, ...result } = currentUser;
-    return await this.prisma.user.update({
+    await this.prisma.user.update({
       where: { id: user.id },
       data: {
         ...result,
@@ -158,13 +158,14 @@ export class NoticesService {
         favoritesIDs: [...currentUser.favoritesIDs, noticeId],
       },
     });
+    return this.prisma.notice.findUnique({ where: { id: noticeId } });
   }
   async addNoticeToViewed(noticeId: string, user: User) {
     const currentUser = await this.prisma.user.findUnique({
       where: { id: user.id },
     });
     const { id, ...result } = currentUser;
-    return await this.prisma.user.update({
+    await this.prisma.user.update({
       where: { id: user.id },
       data: {
         ...result,
@@ -172,5 +173,6 @@ export class NoticesService {
         viewedIDs: [...currentUser.viewedIDs, noticeId],
       },
     });
+    return this.prisma.notice.findUnique({ where: { id: noticeId } });
   }
 }

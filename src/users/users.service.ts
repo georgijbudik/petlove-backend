@@ -28,7 +28,28 @@ export class UsersService {
   }
 
   async getCurrent(id: string) {
-    return await this.findById(id);
+    const currentUser = await this.findById(id);
+
+    const favorites = await this.prismaService.notice.findMany({
+      where: {
+        id: {
+          in: currentUser.favoritesIDs,
+        },
+      },
+    });
+    const viewed = await this.prismaService.notice.findMany({
+      where: {
+        id: {
+          in: currentUser.viewedIDs,
+        },
+      },
+    });
+
+    return {
+      ...currentUser,
+      favoritesIDs: favorites,
+      viewedIDs: viewed,
+    };
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {

@@ -8,23 +8,27 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  email      String   @unique
-  name       String
-  phone      String
-  password   String
-  profileUrl String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  token      String
-  pets       Pet[]
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  email        String   @unique
+  name         String
+  phone        String
+  password     String
+  profileUrl   String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  token        String
+  pets         Pet[]
+  favoritesIDs String[] @db.ObjectId
+  viewedIDs    String[] @db.ObjectId
+  favorites    Notice[] @relation("Favorites", fields: [favoritesIDs], references: [id])
+  viewed       Notice[] @relation("Viewed", fields: [viewedIDs], references: [id])
 
   @@map("users")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Notice {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   species    String
   category   String
   price      Int
@@ -36,6 +40,9 @@ model Notice {
   location   String
   imgURL     String
   popularity Int
+  userIDs    String[] @db.ObjectId
+  user       User[]   @relation("Favorites", fields: [userIDs], references: [id])
+  userViewed User[]   @relation("Viewed", fields: [userIDs], references: [id])
 
   @@map("notices")
 }

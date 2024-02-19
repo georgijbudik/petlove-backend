@@ -11,6 +11,7 @@ interface IGetAllQueries {
   page?: number;
   perPage?: number;
   search?: string;
+  location?: string;
   category?: string;
   gender?: string;
   type?: string;
@@ -28,6 +29,7 @@ export class NoticesService {
     page,
     perPage,
     search,
+    location,
     category,
     gender,
     type,
@@ -45,6 +47,10 @@ export class NoticesService {
           where: {
             title: {
               contains: search,
+              mode: 'insensitive',
+            },
+            location: {
+              contains: location,
               mode: 'insensitive',
             },
             category: {
@@ -77,6 +83,10 @@ export class NoticesService {
           where: {
             title: {
               contains: search,
+              mode: 'insensitive',
+            },
+            location: {
+              contains: location,
               mode: 'insensitive',
             },
             category: {

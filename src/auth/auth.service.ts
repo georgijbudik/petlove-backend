@@ -6,19 +6,18 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
-import { jwtsecret } from './auth.module';
-import { jwtresreshkey } from './strategies/jwt.refresh.strategy';
 import * as argon2 from 'argon2';
 import { UsersService } from '../users/users.service';
 import { LoginCredentialsDto } from './dto/login-credentials.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async signup(createUserDto: CreateUserDto) {
@@ -72,8 +71,8 @@ export class AuthService {
           name,
         },
         {
-          secret: jwtsecret,
-          expiresIn: '15m',
+          secret: this.configService.get('JWT_ACCESS_SECRET'),
+          expiresIn: '23h',
         },
       ),
       this.jwtService.signAsync(
@@ -82,7 +81,7 @@ export class AuthService {
           name,
         },
         {
-          secret: jwtresreshkey,
+          secret: this.configService.get('JWT_REFRESH_SECRET'),
           expiresIn: '7d',
         },
       ),

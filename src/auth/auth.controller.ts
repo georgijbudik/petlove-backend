@@ -22,7 +22,7 @@ import { responses } from 'src/apiResponses/responses';
 @ApiTags('Auth')
 @ApiUnauthorizedResponse({ description: responses.unauthorized })
 @ApiOkResponse({ description: responses.success })
-@ApiInternalServerErrorResponse({ description: 'Server error' })
+@ApiInternalServerErrorResponse({ description: responses.serverError })
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}

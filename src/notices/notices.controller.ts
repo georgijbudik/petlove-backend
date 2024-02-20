@@ -24,7 +24,7 @@ import { User } from '@prisma/client';
 import { AccessTokenGuard } from 'src/auth/common/access.guard';
 
 @ApiTags('Notices')
-@ApiInternalServerErrorResponse({ description: 'Server error' })
+@ApiInternalServerErrorResponse({ description: responses.serverError })
 @Controller('notices')
 export class NoticesController {
   constructor(private readonly noticesService: NoticesService) {}

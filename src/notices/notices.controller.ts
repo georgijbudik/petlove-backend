@@ -10,13 +10,21 @@ import {
 import { NoticesService } from './notices.service';
 
 import { ParseIntPipe, DefaultValuePipe, ParseBoolPipe } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { responses } from 'src/apiResponses/responses';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from '@prisma/client';
 import { AccessTokenGuard } from 'src/auth/common/access.guard';
 
 @ApiTags('Notices')
+@ApiInternalServerErrorResponse({ description: 'Server error' })
 @Controller('notices')
 export class NoticesController {
   constructor(private readonly noticesService: NoticesService) {}
@@ -79,7 +87,8 @@ export class NoticesController {
 
   @UseGuards(AccessTokenGuard)
   @ApiOperation({ summary: 'Add favorite notice' })
-  @ApiOkResponse({ description: responses.success })
+  @ApiCreatedResponse({ status: 201, description: responses.success })
+  @ApiBearerAuth()
   @Post('/favorites/add/:id')
   addNoticeToFavorites(@Param('id') noticeId: string, @GetUser() user: User) {
     return this.noticesService.addNoticeToFavorites(noticeId, user);
@@ -88,6 +97,7 @@ export class NoticesController {
   @UseGuards(AccessTokenGuard)
   @ApiOperation({ summary: 'Remove favorite notice' })
   @ApiOkResponse({ description: responses.success })
+  @ApiBearerAuth()
   @Delete('/favorites/remove/:id')
   removeNoticeFromFavorites(
     @Param('id') noticeId: string,
@@ -98,7 +108,8 @@ export class NoticesController {
 
   @UseGuards(AccessTokenGuard)
   @ApiOperation({ summary: 'Add viewed notice' })
-  @ApiOkResponse({ description: responses.success })
+  @ApiCreatedResponse({ status: 201, description: responses.success })
+  @ApiBearerAuth()
   @Post('/viewed/add/:id')
   addNoticeToViewed(@Param('id') noticeId: string, @GetUser() user: User) {
     return this.noticesService.addNoticeToViewed(noticeId, user);

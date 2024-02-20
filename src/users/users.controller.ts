@@ -32,7 +32,7 @@ import { responses } from 'src/apiResponses/responses';
 
 @ApiTags('Users')
 @ApiUnauthorizedResponse({ description: responses.unauthorized })
-@ApiInternalServerErrorResponse({ description: 'Server error' })
+@ApiInternalServerErrorResponse({ description: responses.serverError })
 @Controller('users')
 export class UsersController {
   constructor(

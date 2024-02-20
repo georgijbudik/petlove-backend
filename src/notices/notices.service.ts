@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 
 import { PaginatedOutputDto } from 'src/prisma/dto/pagination-output.dto';
@@ -160,6 +161,28 @@ export class NoticesService {
     });
     return this.prisma.notice.findUnique({ where: { id: noticeId } });
   }
+
+  async removeNoticeFromFavorites(noticeId: string, user: User) {
+    const currentUser = await this.prisma.user.findUnique({
+      where: { id: user.id },
+    });
+
+    const { id, ...result } = currentUser;
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        ...result,
+
+        favoritesIDs: currentUser.favoritesIDs.filter(
+          (favorite) => favorite !== noticeId,
+        ),
+      },
+    });
+
+    return this.prisma.notice.findUnique({ where: { id: noticeId } });
+  }
+
   async addNoticeToViewed(noticeId: string, user: User) {
     const currentUser = await this.prisma.user.findUnique({
       where: { id: user.id },

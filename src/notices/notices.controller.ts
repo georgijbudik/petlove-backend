@@ -97,7 +97,7 @@ export class NoticesController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @ApiOperation({ summary: 'Add notice viewed' })
+  @ApiOperation({ summary: 'Add viewed notice' })
   @ApiOkResponse({ description: responses.success })
   @Post('/viewed/add/:id')
   addNoticeToViewed(@Param('id') noticeId: string, @GetUser() user: User) {

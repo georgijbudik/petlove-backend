@@ -10,7 +10,6 @@ import { RefreshTokenStrategy } from './strategies/jwt.refresh.strategy';
 import { UsersService } from '../users/users.service';
 import { UsersModule } from 'src/users/users.module';
 
-export const jwtsecret = "vgKVAODrsRofy'K*':@v@M";
 @Module({
   imports: [
     ConfigModule,

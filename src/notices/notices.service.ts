@@ -188,14 +188,15 @@ export class NoticesService {
       where: { id: user.id },
     });
     const { id, ...result } = currentUser;
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: {
-        ...result,
-
-        viewedIDs: [...currentUser.viewedIDs, noticeId],
-      },
-    });
+    if (!currentUser.viewedIDs.includes(noticeId)) {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          ...result,
+          viewedIDs: [...currentUser.viewedIDs, noticeId],
+        },
+      });
+    }
     return this.prisma.notice.findUnique({ where: { id: noticeId } });
   }
 }

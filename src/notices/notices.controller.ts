@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { NoticesService } from './notices.service';
 
 import { ParseIntPipe, DefaultValuePipe, ParseBoolPipe } from '@nestjs/common';
@@ -76,8 +84,20 @@ export class NoticesController {
   addNoticeToFavorites(@Param('id') noticeId: string, @GetUser() user: User) {
     return this.noticesService.addNoticeToFavorites(noticeId, user);
   }
+
   @UseGuards(AccessTokenGuard)
-  @ApiOperation({ summary: 'Get notice species' })
+  @ApiOperation({ summary: 'Remove favorite notice' })
+  @ApiOkResponse({ description: responses.success })
+  @Delete('/favorites/remove/:id')
+  removeNoticeFromFavorites(
+    @Param('id') noticeId: string,
+    @GetUser() user: User,
+  ) {
+    return this.noticesService.removeNoticeFromFavorites(noticeId, user);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @ApiOperation({ summary: 'Add notice viewed' })
   @ApiOkResponse({ description: responses.success })
   @Post('/viewed/add/:id')
   addNoticeToViewed(@Param('id') noticeId: string, @GetUser() user: User) {
